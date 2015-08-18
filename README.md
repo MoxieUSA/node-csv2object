@@ -57,3 +57,11 @@ csv2obj.loadAll('data/mydata.csv.gz', null, true)
 		console.log(err);
 	});
 ```
+
+## Changelog
+
+### 0.0.2
+* Added README.md documentation
+
+### 0.0.1
+* Initial Release
