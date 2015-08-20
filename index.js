@@ -4,6 +4,7 @@
 "use strict";
 
 var csv = require('csv-parser'),
+	combiner = require('stream-combiner2'),
 	fs = require('fs'),
 	gulpif = require('gulp-if'),
 	zlib = require('zlib'),
@@ -13,9 +14,10 @@ function createCSVString(csvFile, options, gzipped) {
 	var gunzip = zlib.createGunzip();
 	options = options || {};
 
-	return fs.createReadStream(csvFile)
-		.pipe(gulpif(gzipped, gunzip))
-		.pipe(csv(options));
+	return combiner.obj([
+		fs.createReadStream(csvFile),
+		gulpif(gzipped, gunzip),
+		csv(options)]);
 }
 
 /**
@@ -35,7 +37,18 @@ exports.loadAll = function (csvFile, options, gzipped) {
 			deferred.resolve(events);
 		})
 		.on('error', function (err) {
-			deferred.reject(err);
+			var msg;
+			switch (err.code) {
+				case 'ENOENT':
+					msg = "File not found.";
+					break;
+				case 'Z_DATA_ERROR':
+					msg = "Invalid GZip file.";
+					break;
+				default:
+					msg = "You should not get this message!"
+			}
+			deferred.reject(msg);
 		});
 	return deferred.promise;
 };
