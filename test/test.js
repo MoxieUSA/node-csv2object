@@ -2,40 +2,7 @@
  * Created by Keith Morris on 8/17/15.
  */
 var expect = require('chai').expect,
-	fs = require('fs'),
-	path = require('path'),
 	csv2obj = require('..');
-	//gzip = require('zlib').gzipSync,
-	//mock = require('mock-fs'),
-	//stream = require('stream');
-	//csv = ['header1,header2,header3',
-	//	'"row 1 item 1","row 1 item 2","row 1 item 3"',
-	//	'"row 2 item 1","row 2 item 2","row 2 item 3"',
-	//	'"row 3 item 1","row 3 item 2","row 3 item 3"'].join('\n'),
-	//csvGzipped = gzip(new Buffer(csv, 'utf8')),
-	//csvPiped = ['gz',
-	//	'"row 1 item 1"|"row 1 item 2"|"row 1 item 3"',
-	//	'"row 2 item 1"|"row 2 item 2"|"row 2 item 3"',
-	//	'"row 3 item 1"|"row 3 item 2"|"row 3 item 3"'].join('\r'),
-	//csvPipedGzipped = gzip(new Buffer(csv, 'utf8'));
-
-//var csvParser = require('csv-parser');
-
-//mock({
-//	'/mocked/directory': {
-//
-//		'file.csv': csv,
-//		'file.csv.gz': csvGzipped,
-//		'filePipe.csv': csvPiped,
-//		'filePipe.csv.gz': csvPipedGzipped
-//	}
-//});
-
-//fs.createReadStream('/mocked/directory/file.csv')
-//	.pipe(csvParser({}))
-//	.on('data', function(data){
-//		console.log("data", data);
-//	});
 
 describe('csv2obj Tests', function () {
 	describe('`load` method tests', function () {
