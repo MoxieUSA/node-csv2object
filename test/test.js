@@ -2,44 +2,12 @@
  * Created by Keith Morris on 8/17/15.
  */
 var expect = require('chai').expect,
-	fs = require('fs'),
-	csv2obj = require('..'),
-	gzip = require('zlib').gzipSync,
-	mock = require('mock-fs'),
-	stream = require('stream'),
-	csv = ['header1,header2,header3',
-		'"row 1 item 1","row 1 item 2","row 1 item 3"',
-		'"row 2 item 1","row 2 item 2","row 2 item 3"',
-		'"row 3 item 1","row 3 item 2","row 3 item 3"'].join('\n'),
-	csvGzipped = gzip(new Buffer(csv, 'utf8')),
-	csvPiped = ['header1|header2|header3',
-		'"row 1 item 1"|"row 1 item 2"|"row 1 item 3"',
-		'"row 2 item 1"|"row 2 item 2"|"row 2 item 3"',
-		'"row 3 item 1"|"row 3 item 2"|"row 3 item 3"'].join('\r'),
-	csvPipedGzipped = gzip(new Buffer(csv, 'utf8'));
-
-var csvParser = require('csv-parser');
-
-mock({
-	'/mocked/directory': {
-
-		'file.csv': csv,
-		'file.csv.gz': csvGzipped,
-		'filePipe.csv': csvPiped,
-		'filePipe.csv.gz': csvPipedGzipped
-	}
-});
-
-//fs.createReadStream('/mocked/directory/file.csv')
-//	.pipe(csvParser({}))
-//	.on('data', function(data){
-//		console.log("data", data);
-//	});
+	csv2obj = require('..');
 
 describe('csv2obj Tests', function () {
 	describe('`load` method tests', function () {
 		it('Should load and parse CSV file into object', function (done) {
-			var fileStream = csv2obj.load('/mocked/directory/file.csv', null, false)
+			var fileStream = csv2obj.load('./test/data/file.csv', null, false)
 				.on('data', function (data) {
 					expect(data.header1).to.equal('row 1 item 1');
 					expect(data.header2).to.equal('row 1 item 2');
@@ -50,7 +18,7 @@ describe('csv2obj Tests', function () {
 		});
 
 		it('Should load and parse gzipped CSV file into object', function (done) {
-			var fileStream = csv2obj.load('/mocked/directory/file.csv.gz', null, true)
+			var fileStream = csv2obj.load('./test/data/file.csv.gz', null, true)
 				.on('data', function (data) {
 					expect(data.header1).to.equal('row 1 item 1');
 					expect(data.header2).to.equal('row 1 item 2');
@@ -63,7 +31,7 @@ describe('csv2obj Tests', function () {
 
 	describe('`loadAll` method tests', function () {
 		it('Should load all data from CSV file into an array of objects', function (done) {
-			csv2obj.loadAll('/mocked/directory/file.csv', null, false)
+			csv2obj.loadAll('./test/data/file.csv', null, false)
 				.then(function success(data) {
 					try {
 						expect(data).to.be.an('array');
@@ -75,13 +43,13 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
-
+				}, function error(err) {
+					done(err);
 				});
 		});
 
 		it('Should load all data from gzipped CSV file into an array of objects', function (done) {
-			csv2obj.loadAll('/mocked/directory/file.csv.gz', null, true)
+			csv2obj.loadAll('./test/data/file.csv.gz', null, true)
 				.then(function success(data) {
 					try {
 						expect(data).to.be.an('array');
@@ -93,23 +61,22 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
-
+				}, function error(err) {
+					done(err);
 				});
 		});
 	});
 
 	describe('Passing through options to csv-parser', function () {
 		it('Should properly pass through options to the csv-parser module for CSV files', function (done) {
-			csv2obj.loadAll('/mocked/directory/filePipe.csv', {
+			csv2obj.loadAll('./test/data/filePipe.csv', {
 				//raw: false,     // do not decode to utf-8 strings
 				separator: '|', // specify optional cell separator
-				newline: '\r',  // specify a newline character
+				//newline: '\r',  // specify a newline character
 				//strict: true    // require column length match headers length
 				headers: ['firstHeader', 'secondHeader', 'thirdHeader']
 			}, false)
 				.then(function success(data) {
-					//console.log(data);
 					try {
 						expect(data).to.be.an('array');
 						expect(data.length).to.equal(4);
@@ -120,8 +87,35 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
+				}, function error(err) {
+					done(err);
+				});
+		});
+	});
 
+	describe('File handling tests', function () {
+		it('Should fail gracefully if file does not exist', function (done) {
+			csv2obj.loadAll('./test/data/nonexistent.csv')
+				.then(function () {
+				}, function (err) {
+					try {
+						expect(err).to.equal('File not found.');
+						done();
+					} catch (err) {
+						done(err);
+					}
+				});
+		});
+		it('Should fail gracefully if GZip can not process the file.', function (done) {
+			csv2obj.loadAll('./test/data/file.csv', null, true)
+				.then(function () {
+				}, function (err) {
+					try {
+						expect(err).to.equal('Invalid GZip file.');
+						done();
+					} catch (err) {
+						done(err);
+					}
 				});
 		});
 	});
