@@ -43,8 +43,8 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
-
+				}, function error(err) {
+					done(err);
 				});
 		});
 
@@ -61,8 +61,8 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
-
+				}, function error(err) {
+					done(err);
 				});
 		});
 	});
@@ -87,8 +87,35 @@ describe('csv2obj Tests', function () {
 					} catch (err) {
 						done(err);
 					}
-				}, function error() {
+				}, function error(err) {
+					done(err);
+				});
+		});
+	});
 
+	describe('File handling tests', function () {
+		it('Should fail gracefully if file does not exist', function (done) {
+			csv2obj.loadAll('./test/data/nonexistent.csv')
+				.then(function () {
+				}, function (err) {
+					try {
+						expect(err).to.equal('File not found.');
+						done();
+					} catch (err) {
+						done(err);
+					}
+				});
+		});
+		it('Should fail gracefully if GZip can not process the file.', function (done) {
+			csv2obj.loadAll('./test/data/file.csv', null, true)
+				.then(function () {
+				}, function (err) {
+					try {
+						expect(err).to.equal('Invalid GZip file.');
+						done();
+					} catch (err) {
+						done(err);
+					}
 				});
 		});
 	});
