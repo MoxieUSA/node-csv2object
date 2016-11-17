@@ -60,6 +60,10 @@ csv2obj.loadAll('data/mydata.csv.gz', null, true)
 
 ## Changelog
 
+### 1.0.0
+
+* Move and cleanup repository
+
 ### 0.0.2
 * Added README.md documentation
 
