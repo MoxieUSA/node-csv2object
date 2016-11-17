@@ -20,12 +20,12 @@
   "homepage": "https://github.com/keithmorris/node-csv2object",
   "dependencies": {
     "csv-parser": "^1.7.0",
-    "gulp-if": "^1.2.5",
+    "gulp-if": "^2.0.2",
     "q": "^1.4.1",
     "stream-combiner2": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "mocha": "^2.2.5"
+    "mocha": "^3.1.2"
   }
 }
