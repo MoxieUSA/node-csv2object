@@ -1,6 +1,6 @@
 {
   "name": "csv2object",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A Simple NodeJS library for extracting an array of Javascript Objects from a CSV file. The CSV may also (optionally) be GZipped.",
   "main": "index.js",
   "scripts": {
