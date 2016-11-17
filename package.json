@@ -4,12 +4,9 @@
   "description": "A Simple NodeJS library for extracting an array of Javascript Objects from a CSV file. The CSV may also (optionally) be GZipped.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/test.js"
+    "test": "mocha test/test.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MoxieUSA/node-splunk-data-extractor.git"
-  },
+  "repository": "keithmorris/node-csv2object",
   "keywords": [
     "node",
     "splunk",
@@ -18,9 +15,9 @@
   "author": "Keith Morris <standupbass@gmail.com> (http://standupbass.wordpress.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MoxieUSA/node-splunk-data-extractor/issues"
+    "url": "https://github.com/keithmorris/node-csv2object/issues"
   },
-  "homepage": "https://github.com/MoxieUSA/node-splunk-data-extractor#readme",
+  "homepage": "https://github.com/keithmorris/node-csv2object",
   "dependencies": {
     "csv-parser": "^1.7.0",
     "gulp-if": "^1.2.5",
